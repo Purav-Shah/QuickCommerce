@@ -54,8 +54,8 @@ The application is built using the following microservices:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/quick-commerce.git
-   cd quick-commerce
+   git clone https://github.com/yourusername/QuickCommerce.git
+   cd QuickCommerce
    ```
 
 2. **Configure Database**
