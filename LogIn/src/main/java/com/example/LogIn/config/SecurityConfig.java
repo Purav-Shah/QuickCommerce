@@ -34,7 +34,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/csrf", "/api/auth/").permitAll()
+                        .requestMatchers("/register", "/login", "/", "/csrf",
+                               "/swagger-ui.html", "/swagger-ui/**", 
+                               "/v3/api-docs/**", "/webjars/**").permitAll()
                         
                         // Admin-only endpoints
                         .requestMatchers(
