@@ -25,21 +25,21 @@ spring:
           predicates:
             - Path=/api/products/**
           filters:
-            - RewritePath=/api/products/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/products/(?<segment>.*), /api/products/$\{segment}
 
         - id: inventory-service
           uri: lb://INVENTORY-SERVICE
           predicates:
             - Path=/api/inventory/**
           filters:
-            - RewritePath=/api/inventory/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/inventory/(?<segment>.*), /api/inventory/$\{segment}
 
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/api/orders/**
           filters:
-            - RewritePath=/api/orders/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/orders/(?<segment>.*), /api/orders/$\{segment}
 
         - id: payment-service
           uri: lb://PAYMENT-SERVICE

@@ -12,9 +12,9 @@ import java.util.List;
 @FeignClient(name = "INVENTORY-SERVICE")
 public interface InventoryServiceClient {
 
-    @GetMapping("/check")
+    @GetMapping("/api/inventory/check")
     List<InventoryResponse> checkInventory(@RequestParam List<Long> productIds);
 
-    @PutMapping("/{productId}")
+    @PutMapping("/api/inventory/{productId}")
     void updateInventory(@PathVariable Long productId, @RequestParam Integer quantityChange);
 }

@@ -6,6 +6,7 @@ import com.example.productservice.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 //import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -51,9 +52,9 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
-        product.setActive(false);
-        productRepository.save(product);
+        productRepository.delete(product);
     }
 }
