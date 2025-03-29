@@ -51,7 +51,12 @@ public class InventoryService {
         InventoryItem inventoryItem = inventoryRepository.findByProductId(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Inventory not found for product: " + productId));
 
-        inventoryItem.setQuantity(inventoryItem.getQuantity() + quantityChange);
+        int newQuantity = inventoryItem.getQuantity() + quantityChange;
+        if (newQuantity < 0) {
+            throw new IllegalStateException("Insufficient inventory for product: " + productId + ". Available: " + inventoryItem.getQuantity() + ", Requested: " + Math.abs(quantityChange));
+        }
+
+        inventoryItem.setQuantity(newQuantity);
         return inventoryRepository.save(inventoryItem);
     }
 

@@ -1,0 +1,65 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  application:
+    name: "api-gateway"
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/api/**
+          filters:
+            - StripPrefix=1
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**
+          filters:
+            - StripPrefix=0
+
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/inventory/**
+          filters:
+            - StripPrefix=0
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=0
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=0
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    ip-address: 127.0.0.1
+    hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}
+
+JWT_PUBLIC_SECRET: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqfni37IKzokPkRjL6ekyGgwHiGcnLIAHhgoWddyraSRxNw4VfBNSFUaLxT9DMiNCwH614ALasV6WNJwtiPXwPVTb8U6fAdKASdK0zd9jZaQeGn2eU+u552g22OimrQGuqruTv16NLpEduTiPK4zM+RLm8jCqhZiZhwmiFfCyciPhBfYnBYQ7+pbldEYtw072mX3UZuzCNNtNF/IDnkoj4scA04MMmmhtjN4F+pyud4jksnrmaR8oJvC3lsLplL7minIacGlkfBA6wqfa3jz8EfEtgBYwWp6U/yoHTQ/9mt5bh/EHwxLIjs4cw67kRcTnrOQtH4N7uAoWiX9EqvIV2wIDAQAB"
