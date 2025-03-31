@@ -13,4 +13,5 @@ public interface UserService {
     UserResponse updateUser(UserRequest user);
     void deleteUserById(int userId);
     void deleteAllUsers();
+
 }

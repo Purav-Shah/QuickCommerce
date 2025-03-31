@@ -57,10 +57,22 @@ public class UserServiceImpl implements UserService{
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException("Cannot update. User not found with ID: " + user.getId()));
 
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(existingUser.getPassword());
-        existingUser.setRole(user.getRole());
+        // Only update role if it's provided
+        if (user.getRole() != null) {
+            existingUser.setRole(user.getRole());
+        }
+        
+        // Only update other fields if they're provided
+        if (user.getName() != null) {
+            existingUser.setName(user.getName());
+        }
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
+        }
+        // Don't update password unless explicitly provided with a new one
+        if (user.getPassword() != null) {
+            existingUser.setPassword(user.getPassword());
+        }
 
         UserResponse userSaved = userMapper.mapToDTO(userRepository.save(existingUser));
         userWebSocketHandler.sendUserUpdate(existingUser, false);
@@ -83,4 +95,5 @@ public class UserServiceImpl implements UserService{
         }
         userRepository.deleteAll();
     }
+    
 }

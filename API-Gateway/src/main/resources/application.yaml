@@ -4,6 +4,10 @@ spring:
     web-application-type: reactive
   application:
     name: "api-gateway"
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   cloud:
     gateway:
       routes:
@@ -17,9 +21,9 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/api/users/**
+            - Path=/api/user/**, /api/users/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=0
 
         - id: product-service
           uri: lb://product-service

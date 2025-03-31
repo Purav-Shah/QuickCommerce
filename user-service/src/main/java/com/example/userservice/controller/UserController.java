@@ -76,6 +76,17 @@ public class UserController {
                 .build());
     }
 
+    @PutMapping("/user/{id}/role")
+    public ResponseEntity<DTO<UserResponse>> updateUserRole(@PathVariable int id, @RequestBody UserRequest userRequest) {
+        userRequest.setId(id);
+        UserResponse updatedUser = service.updateUser(userRequest);
+        return ResponseEntity.ok(DTO.<UserResponse>builder()
+                .success(true)
+                .message("User Role Updated Successfully")
+                .data(updatedUser)
+                .build());
+    }
+
     @DeleteMapping("/users")
     private ResponseEntity<DTO<String>> deleteAllUsers(){
         service.deleteAllUsers();
@@ -85,4 +96,5 @@ public class UserController {
                 .data(null)
                 .build());
     }
+
 }

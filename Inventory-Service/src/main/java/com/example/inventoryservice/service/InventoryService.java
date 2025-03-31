@@ -48,16 +48,30 @@ public class InventoryService {
     }
 
     public InventoryItem updateInventory(Long productId, Integer quantityChange) {
+        log.info("Updating inventory for productId: {}, quantityChange: {}", productId, quantityChange);
+        
         InventoryItem inventoryItem = inventoryRepository.findByProductId(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Inventory not found for product: " + productId));
-
+                .orElseThrow(() -> {
+                    log.error("Inventory not found for product: {}", productId);
+                    return new EntityNotFoundException("Inventory not found for product: " + productId);
+                });
+                
+        log.info("Current inventory for product {}: {}", productId, inventoryItem.getQuantity());
+        
         int newQuantity = inventoryItem.getQuantity() + quantityChange;
+        log.info("Calculated new quantity for product {}: {}", productId, newQuantity);
+        
         if (newQuantity < 0) {
-            throw new IllegalStateException("Insufficient inventory for product: " + productId + ". Available: " + inventoryItem.getQuantity() + ", Requested: " + Math.abs(quantityChange));
+            String errorMessage = String.format("Insufficient inventory for product: %d. Available: %d, Requested: %d",
+                    productId, inventoryItem.getQuantity(), Math.abs(quantityChange));
+            log.error(errorMessage);
+            throw new IllegalStateException(errorMessage);
         }
 
         inventoryItem.setQuantity(newQuantity);
-        return inventoryRepository.save(inventoryItem);
+        InventoryItem savedItem = inventoryRepository.save(inventoryItem);
+        log.info("Successfully updated inventory for product {}. New quantity: {}", productId, savedItem.getQuantity());
+        return savedItem;
     }
 
     public InventoryItem addInventoryItem(InventoryItem inventoryItem) {
